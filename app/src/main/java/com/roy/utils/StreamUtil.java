@@ -14,7 +14,7 @@ public class StreamUtil {
      * @return  流转换成的字符串  返回null代表异常
      * @param is  流对象
      */
-    public static String streamToString(InputStream is) throws IOException {
+    public static String streamToString(InputStream is) {
         //1.在读取的过程中，将读取的内容存储值缓存中，然后一次性转换成字符串返回
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         //2.读流操作，读到没有为止(循环)
@@ -30,8 +30,13 @@ public class StreamUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
-            bos.close();
-            is.close();
+            try {
+                bos.close();
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
         return null;
     }
