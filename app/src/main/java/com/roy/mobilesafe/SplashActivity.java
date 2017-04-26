@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -15,12 +16,17 @@ import android.view.Window;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.roy.utils.StreamUtil;
 import com.roy.utils.ToastUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -45,6 +51,7 @@ public class SplashActivity extends AppCompatActivity {
     protected static final int ERROR_IO = 103;
     protected static final int ERROR_JSON = 104;
     private String mVersionDes;
+    private String mDownloadUrl;
     private TextView textView;
     private int mLocalVersionCode;
     private Handler mHandler = new Handler(){
@@ -85,6 +92,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //立即更新
+                downApk();
             }
         });
 
@@ -94,10 +102,55 @@ public class SplashActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 //取消对话框
                 enterHome();
+                dialog.dismiss();
             }
         });
         builder.show();
 
+    }
+
+    private void downApk() {
+        //apk下载地址，放置apk所在路径
+
+        //1.判断sd卡是否可用，是否挂载上Enviroment.MEDIA_MOUNTED
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            //2.获取sd卡是否可用Enviroment
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"app-release.apk";
+            //3.发送请求，获取apk，并且放置到指定路径
+            HttpUtils httpUtils = new HttpUtils();
+            httpUtils.download(mDownloadUrl, path, new RequestCallBack<File>() {
+                @Override
+                public void onSuccess(ResponseInfo<File> responseInfo) {
+                    //下载成功(下载过后的放置sd卡中的apk)
+                    Log.i(tag,"下载成功");
+                    File file = responseInfo.result;
+                }
+
+                @Override
+                public void onFailure(HttpException e, String s) {
+                    //下载失败
+                    Log.i(tag,"下载失败");
+                }
+
+                @Override
+                public void onStart() {
+                    //刚刚开始下载
+                    Log.i(tag,"刚刚开始下载");
+                    super.onStart();
+
+                }
+
+                @Override
+                public void onLoading(long total, long current, boolean isUploading) {
+                    //下载中
+                    Log.i(tag,"下载中....");
+                    Log.i(tag,"total ="+total);
+                    Log.i(tag,"current ="+current);
+                    super.onLoading(total,current,isUploading);
+
+                }
+            });
+        }
     }
 
     private void enterHome() {
@@ -176,12 +229,12 @@ public class SplashActivity extends AppCompatActivity {
                         String versionName = jsonObject.getString("versionName");
                         mVersionDes = jsonObject.getString("versionDes");
                         String versionCode = jsonObject.getString("versionCode");
-                        String downloadUrl = jsonObject.getString("downloadUrl");
+                        mDownloadUrl = jsonObject.getString("downloadUrl");
 
                         Log.i(tag,versionName);
                         Log.i(tag,mVersionDes);
                         Log.i(tag,versionCode);
-                        Log.i(tag,downloadUrl);
+                        Log.i(tag,mDownloadUrl);
 
                         //8,对比版本号
                         if (mLocalVersionCode < Integer.parseInt(versionCode)){
