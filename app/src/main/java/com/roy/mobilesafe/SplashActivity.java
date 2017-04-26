@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -102,6 +103,18 @@ public class SplashActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 //取消对话框
                 enterHome();
+
+            }
+        });
+
+        /**
+         * 点击取消事件监听
+         */
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                //及即使用户点击取消，也让其进入主界面
+                enterHome();
                 dialog.dismiss();
             }
         });
@@ -124,6 +137,8 @@ public class SplashActivity extends AppCompatActivity {
                     //下载成功(下载过后的放置sd卡中的apk)
                     Log.i(tag,"下载成功");
                     File file = responseInfo.result;
+
+                    installApk(file);
                 }
 
                 @Override
@@ -151,6 +166,24 @@ public class SplashActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void installApk(File file) {
+        //系统应用界面，源码，安装apk入口
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+//        //文件作为数据源
+//        intent.setData(Uri.fromFile(file));
+//        //设置安装的类型
+//        intent.setType("application/vnd.android.package-archive");
+        intent.setDataAndType(Uri.fromFile(file),"application/vnd.android.package-archive");
+        startActivityForResult(intent,0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        enterHome();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void enterHome() {
