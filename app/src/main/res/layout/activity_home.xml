@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.roy.mobilesafe.HomeActivity">
+    <TextView
+        android:text="功能列表"
+        style="@style/TitleStyle"
+        />
+    <com.roy.view.FocusTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="啦啦啦啦啦啦啦啦啦啦啦，唉唉啊啊啊啊啊啊啊啊啊，哦哦哦哦哦哦哦哦哦哦哦哦哦"
+        android:textSize="20sp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"/>
 
-</RelativeLayout>
+    <!--android:numColumns="" 设置列数 -->
+    <GridView
+        android:id="@+id/gv_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:verticalSpacing="10dp"
+        android:numColumns="3"
+        ></GridView>
+</LinearLayout>

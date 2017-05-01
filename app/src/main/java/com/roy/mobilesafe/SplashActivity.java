@@ -14,6 +14,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -54,6 +57,7 @@ public class SplashActivity extends AppCompatActivity {
     private String mVersionDes;
     private String mDownloadUrl;
     private TextView textView;
+    private RelativeLayout rl;
     private int mLocalVersionCode;
     private Handler mHandler = new Handler(){
         @Override
@@ -201,6 +205,14 @@ public class SplashActivity extends AppCompatActivity {
         initUi();
         //初始化数据
         initData();
+        //初始化动画
+        initAnimation();
+    }
+
+    private void initAnimation() {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0,1);
+        alphaAnimation.setDuration(3000);
+        rl.startAnimation(alphaAnimation);
     }
 
     /**
@@ -309,7 +321,7 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void initUi() {
         textView = (TextView) findViewById(R.id.tv_version_name);
-
+        rl = (RelativeLayout)findViewById(R.id.rl);
     }
 
 
