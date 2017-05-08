@@ -13,6 +13,12 @@ import com.roy.mobilesafe.R;
  * Created by Roy on 2017/5/1.
  */
 public class SettingItemView extends RelativeLayout {
+    public static final String NAMESPACE = "http://schemas.android.com/apk/res/com.roy.mobilesafe";
+    private  CheckBox cb_box;
+    private  TextView tv_des;
+    private  String mDestitle;
+    private  String mDesoff;
+    private  String mDeson;
     public SettingItemView(Context context) {
         this(context,null);
     }
@@ -28,7 +34,42 @@ public class SettingItemView extends RelativeLayout {
 
         //自定义组合控件中的标题描述
         TextView tv_title = (TextView)findViewById(R.id.tv_title);
-        TextView tv_des = (TextView)findViewById(R.id.tv_des);
-        CheckBox cb_box = (CheckBox)findViewById(R.id.cb_box);
+        tv_des = (TextView)findViewById(R.id.tv_des);
+        cb_box = (CheckBox)findViewById(R.id.cb_box);
+        initAttrs(attrs);
+        
+//        setCheck(true);
+        tv_title.setText(mDestitle);
+
+    }
+
+    private void initAttrs(AttributeSet attrs) {
+
+        mDestitle = attrs.getAttributeValue(NAMESPACE, "destitle");
+
+        mDesoff = attrs.getAttributeValue(NAMESPACE, "desoff");
+
+        mDeson = attrs.getAttributeValue(NAMESPACE, "deson");
+    }
+
+    /**
+     * 判断是否开启
+     * @return
+     */
+    public boolean isCheck() {
+        return cb_box.isChecked();
+    }
+
+    /**
+     * 切换开启变量，由点击过程中去做传递
+     * @param isCheck
+     */
+    public void setCheck(boolean isCheck) {
+        cb_box.setChecked(isCheck);
+        if (isCheck){
+            tv_des.setText(mDeson);
+        }else{
+            tv_des.setText(mDesoff);
+        }
     }
 }

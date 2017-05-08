@@ -24,6 +24,8 @@ import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.roy.utils.ConstantValue;
+import com.roy.utils.SpUtil;
 import com.roy.utils.StreamUtil;
 import com.roy.utils.ToastUtil;
 
@@ -233,7 +235,11 @@ public class SplashActivity extends AppCompatActivity {
         服务器版本号
         新版本apk下载地址
          */
-        checkVersion();
+        if (SpUtil.getBoolean(this, ConstantValue.OPEN_UPDATE,false)) {
+            checkVersion();
+        }else{
+            mHandler.sendEmptyMessageDelayed(ENTER_HOME,4000);
+        }
     }
 
     /**

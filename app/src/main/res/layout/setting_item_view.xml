@@ -21,8 +21,17 @@
             android:textSize="18sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        <!--
+             android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            让checkBox不响应此事件，然后回传给SettingItemView响应
+        -->
         <CheckBox
             android:id="@+id/cb_box"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
