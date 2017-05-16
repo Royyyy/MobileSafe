@@ -17,6 +17,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.roy.utils.ConstantValue;
+import com.roy.utils.Md5Util;
 import com.roy.utils.SpUtil;
 import com.roy.utils.ToastUtil;
 
@@ -80,7 +81,8 @@ public class HomeActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog dialog = builder.create();
         final View view = View.inflate(this,R.layout.dialog_confirm_psd,null);
-        dialog.setView(view);
+        //这里为了低版本的兼容，所以用了5个参数的setView方法，分别设置view的内边距
+        dialog.setView(view,0,0,0,0);
         dialog.show();
         Button bt_submit = (Button)view.findViewById(R.id.bt_submit);
         Button bt_cancel = (Button)view.findViewById(R.id.bt_cancel);
@@ -92,10 +94,10 @@ public class HomeActivity extends AppCompatActivity {
                 EditText firstpsd = (EditText) view.findViewById(R.id.firstpsd);
                 String firstPsd = firstpsd.getText().toString();
                 if (!TextUtils.isEmpty(firstPsd)){
-                    //进行密码判断
+                    //进行将存储在sp中32位的密码获取出来，然后再与输入密码做对比
                    String twicePsd = SpUtil.getString(getApplicationContext(),ConstantValue.MOBILT_SAFE_PSD,"");
-                    if (firstPsd.equals(twicePsd)){
-                        Intent intent = new Intent(getApplicationContext(),SplashActivity.class);
+                    if (twicePsd.equals(Md5Util.encoder(firstPsd))){
+                        Intent intent = new Intent(getApplicationContext(),SetupOverActivity.class);
                         startActivity(intent);
                         //防止跳转成功以后点击返回，会继续跳到输入框，所以这里要用到dismiss
                         dialog.dismiss();
@@ -138,11 +140,11 @@ public class HomeActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(firstPsd) && !TextUtils.isEmpty(twicePsd)){
                     //进行密码判断
                     if (firstPsd.equals(twicePsd)){
-                        Intent intent = new Intent(getApplicationContext(),SplashActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),SetupOverActivity.class);
                         startActivity(intent);
                         //防止跳转成功以后点击返回，会继续跳到输入框，所以这里要用到dismiss
                         dialog.dismiss();
-                        SpUtil.putString(getApplicationContext(),ConstantValue.MOBILT_SAFE_PSD,firstPsd);
+                        SpUtil.putString(getApplicationContext(),ConstantValue.MOBILT_SAFE_PSD, Md5Util.encoder(firstPsd));
                     }else{
                         ToastUtil.show(getApplicationContext(),"两次密码不一致");
                     }

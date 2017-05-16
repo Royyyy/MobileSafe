@@ -7,7 +7,7 @@ import android.widget.TextView;
 /**
  * Created by Roy on 2017/4/26.
  */
-public class FocusTextView extends TextView {
+public class FocusTextView extends android.support.v7.widget.AppCompatTextView {
     public FocusTextView(Context context) {
         super(context);
     }
