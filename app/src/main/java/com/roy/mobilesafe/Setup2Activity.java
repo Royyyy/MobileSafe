@@ -14,13 +14,34 @@ import com.roy.utils.SpUtil;
 import com.roy.utils.ToastUtil;
 import com.roy.view.SettingItemView;
 
-public class Setup2Activity extends AppCompatActivity {
+public class Setup2Activity extends BaseSetupActivity {
     private SettingItemView siv_bound;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup2);
         initUi();
+    }
+
+    @Override
+    protected void showNextPage() {
+        String simSerialNumber = SpUtil.getString(this,ConstantValue.SIM_NUMBER,"");
+        if (!TextUtils.isEmpty(simSerialNumber)) {
+            Intent intent = new Intent(this, Setup3Activity.class);
+            startActivity(intent);
+            finish();
+            overridePendingTransition(R.anim.next_in_anim,R.anim.next_out_anim);
+        }else{
+            ToastUtil.show(this,"请绑定sim卡");
+        }
+    }
+
+    @Override
+    protected void showPrePage() {
+        Intent intent = new Intent(this,Setup1Activity.class);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.pre_in_anim,R.anim.pre_out_anim);
     }
 
     private void initUi() {
@@ -61,21 +82,5 @@ public class Setup2Activity extends AppCompatActivity {
 
 
     }
-    public void nextPage(View view){
-        String simSerialNumber = SpUtil.getString(this,ConstantValue.SIM_NUMBER,"");
-        if (!TextUtils.isEmpty(simSerialNumber)) {
-            Intent intent = new Intent(this, Setup3Activity.class);
-            startActivity(intent);
-            finish();
-            overridePendingTransition(R.anim.next_in_anim,R.anim.next_out_anim);
-        }else{
-            ToastUtil.show(this,"请绑定sim卡");
-        }
-    }
-    public void previousPage(View view){
-        Intent intent = new Intent(this,Setup1Activity.class);
-        startActivity(intent);
-        finish();
-        overridePendingTransition(R.anim.pre_in_anim,R.anim.pre_out_anim);
-    }
+
 }
