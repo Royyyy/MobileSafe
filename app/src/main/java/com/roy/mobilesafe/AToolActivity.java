@@ -22,7 +22,8 @@ public class AToolActivity extends AppCompatActivity {
         tv_query_phone_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(getApplicationContext(), QueryAddressActivity.class));
+                startActivity(new Intent(getApplicationContext(), QuaryAddressActivity.class));
+
             }
         });
     }
