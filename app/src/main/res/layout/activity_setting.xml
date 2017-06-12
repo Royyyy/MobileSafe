@@ -19,5 +19,15 @@
         mobilesafe:deson="自动更新已开启"
         >
     </com.roy.view.SettingItemView>
+    <com.roy.view.SettingItemView
+        xmlns:mobilesafe="http://schemas.android.com/apk/res/com.roy.mobilesafe"
+        android:id="@+id/siv_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        mobilesafe:destitle="电话归属地查询"
+        mobilesafe:desoff="电话归属地查询已关闭"
+        mobilesafe:deson="电话归属地查询已开启"
+        >
+    </com.roy.view.SettingItemView>
 
 </LinearLayout>
